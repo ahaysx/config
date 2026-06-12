@@ -11,7 +11,10 @@ return {
         enable = true
       },
       indent = {
-        enable = true
+        enable = true,
+        -- treesitter's python indent over-indents (e.g. o inside a function
+        -- body); vim's built-in python indent is more reliable
+        disable = { "python" }
       },
       ensure_installed = {
         "c",
