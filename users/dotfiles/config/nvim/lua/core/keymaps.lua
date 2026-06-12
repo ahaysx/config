@@ -79,9 +79,10 @@ vim.keymap.set("n", "<leader>b", function()
   end
 end, { desc = "Build and run if successful" })
 
--- Map <Esc><Esc> in terminal mode to close the terminal split
+-- Map <Esc><Esc> to close the terminal split, from terminal and normal mode
 vim.api.nvim_create_autocmd("TermOpen", {
   callback = function()
     vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>:q<CR>]], { buffer = true })
+    vim.keymap.set("n", "<Esc><Esc>", ":q<CR>", { buffer = true, silent = true })
   end
 })
