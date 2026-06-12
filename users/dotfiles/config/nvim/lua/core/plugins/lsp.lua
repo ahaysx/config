@@ -40,35 +40,42 @@ return {
       -- Autocomplete: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#basic-mappings
       lsp.default_keymaps({ buffer = bufnr })
 
-      vim.keymap.set({ 'n', 'x' }, 'gq', function()
-        vim.lsp.buf.format({ async = false, timeout_ms = 10000 })
-      end)
+
+      -- Rename symbol
+      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+
+      -- Code actions
+      vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+      -- vim.keymap.set('v', '<leader>ca', vim.lsp.buf.range_code_action, opts) -- For visual mode
     end)
 
     -- https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
     lsp.ensure_installed({
-      'jedi_language_server',
+      'basedpyright',
       'rust_analyzer',
       'lua_ls',
       'gopls',
       'terraformls',
       'nil_ls',
-      'clangd'
+      'clangd',
+      'ruff'
       -- Requires npm
       -- 'yamlls',
       -- 'jsonls'
     })
 
-    lsp.format_on_save({
-      servers = {
-        ['lua_ls'] = { 'lua' },
-        ['rust_analyzer'] = { 'rust' },
-        ['nil'] = { 'nix' },
-      }
-    })
 
     -- Configure lua language server for neovim
     require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+
+    -- Tone down basedpyright's aggressive type checking
+    require('lspconfig').basedpyright.setup({
+      settings = {
+        basedpyright = {
+          typeCheckingMode = "standard"
+        }
+      }
+    })
 
 
     -- Speficically require clangd since it can't be installed via Mason on ARM64
