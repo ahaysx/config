@@ -58,6 +58,11 @@ vim.opt.scrolloff = 10
 
 vim.cmd [[colorscheme no-clown-fiesta]]
 
+-- The pinned theme commit predates the @punctuation.* treesitter group names,
+-- so its intended white punctuation never applies; restore it here.
+vim.api.nvim_set_hl(0, "@punctuation.delimiter", { fg = "#E1E1E1" })
+vim.api.nvim_set_hl(0, "@punctuation.bracket", { fg = "#E1E1E1" })
+
 vim.g.netrw_liststyle = 3
 
 -- vim-terraform
