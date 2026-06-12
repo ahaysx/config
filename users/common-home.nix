@@ -82,9 +82,22 @@
      ignoreDups = true;
     };
 
+    initContent = ''
+      # Cached kubectl completion (the oh-my-zsh plugin regenerates it every
+      # shell start, ~5s). Delete ~/.kubectl_completion after upgrading kubectl.
+      if [[ -f ~/.kubectl_completion ]]; then
+        source ~/.kubectl_completion
+      elif command -v kubectl >/dev/null; then
+        kubectl completion zsh > ~/.kubectl_completion
+        source ~/.kubectl_completion
+      fi
+    '';
+
     shellAliases = {
       ll = "ls -la";
       vim = "nvim";
+      ta = "tmux attach -t";
+      tn = "tmux new -s";
     };
 
     plugins = [
@@ -105,7 +118,6 @@
       plugins = [
         "git"
         "gcloud"
-        "kubectl"
         "copybuffer"
         "vi-mode"
       ];
