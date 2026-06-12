@@ -1,3 +1,25 @@
+function open_online_doc()
+  local word = vim.fn.expand("<cword>")
+  if not word or word == "" then
+    print("No word under cursor")
+    return
+  end
+
+  -- Prefer man7.org (POSIX); fallback is cppreference
+  local posix_url = "https://man7.org/linux/man-pages/man3/" .. word .. ".3.html"
+  local fallback_url = "https://en.cppreference.com/mwiki/index.php?search=" .. word
+
+  -- macOS uses 'open', Linux uses 'xdg-open'
+  local opener = vim.fn.has("mac") == 1 and "open" or "xdg-open"
+  local handle = io.popen("curl -s -o /dev/null -w '%{http_code}' " .. posix_url)
+  local code = handle:read("*a")
+  handle:close()
+
+  local url = code == "200" and posix_url or fallback_url
+  os.execute(opener .. " " .. url)
+end
+
+
 return {
   'nvim-telescope/telescope.nvim',
   dependencies = {
@@ -17,14 +39,28 @@ return {
     vim.keymap.set('n', '<leader>ft', builtin.treesitter, {})
     vim.keymap.set('n', '<leader>fd', builtin.diagnostics, {})
     vim.keymap.set('n', '<leader>fS', builtin.lsp_document_symbols, {})
+    -- Search for the word under the cursor in the project.
     vim.keymap.set('n', '<leader>pws', function()
       local word = vim.fn.expand('<cword>')
       builtin.grep_string({ search = word })
     end)
+    -- Search for the WORD under the cursor in the project.
     vim.keymap.set('n', '<leader>pWs', function()
       local word = vim.fn.expand('<cWORD>')
       builtin.grep_string({ search = word })
     end)
+    -- vim.keymap.set('n', 'gm', builtin.man_pages, {})
+    vim.keymap.set('n', 'gm', function()
+      local word = vim.fn.expand('<cword>')
+      builtin.man_pages({
+        sections = { '3' }, -- section 3 for C library functions
+        query = word,
+        default_text = word,
+      })
+    end, { noremap = true, silent = true })
+    vim.keymap.set("n", "<leader>d", function()
+      open_online_doc()
+    end, { desc = "Open online C doc for word under cursor" })
 
     -- LSP
     vim.keymap.set('n', 'gr', builtin.lsp_references, {})

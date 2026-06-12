@@ -35,3 +35,49 @@ vim.keymap.set('n', 'i', function()
     return 'i'
   end
 end, { expr = true })
+
+vim.o.makeprg = "make"
+vim.o.errorformat = "%f:%l:%c: %m"
+
+-- Compile and open quickfix
+vim.keymap.set("n", "<leader>m", function()
+  vim.cmd("make")
+  vim.cmd("cwindow")
+end, { desc = "Make and show errors" })
+
+-- Run the program in a terminal split
+vim.keymap.set("n", "<leader>r", function()
+  vim.cmd("split | terminal ./main")
+end, { desc = "Run ./main in terminal split" })
+
+-- Build then run only if compilation succeeds
+-- vim.keymap.set("n", "<leader>b", function()
+--   vim.cmd("make")
+--   if vim.v.shell_error == 0 then
+--     vim.cmd("split | terminal")
+--   else
+--     vim.cmd("cwindow")
+--   end
+-- end, { desc = "Build and run if successful" })
+vim.keymap.set("n", "<leader>b", function()
+  local current_dir = vim.fn.getcwd()          -- Save current working directory
+  local file_dir = vim.fn.expand("%:p:h")       -- Get directory of current file
+  vim.cmd("lcd " .. file_dir)                   -- Change to file's directory
+
+  vim.cmd("make")                               -- Run make
+
+  if vim.v.shell_error == 0 then
+    vim.cmd("lcd " .. current_dir)              -- Restore original directory
+    vim.cmd("split | terminal")                 -- Open terminal
+  else
+    vim.cmd("lcd " .. current_dir)              -- Restore even if make failed
+    vim.cmd("cwindow")                          -- Show quickfix window
+  end
+end, { desc = "Build and run if successful" })
+
+-- Map <Esc><Esc> in terminal mode to close the terminal split
+vim.api.nvim_create_autocmd("TermOpen", {
+  callback = function()
+    vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>:q<CR>]], { buffer = true })
+  end
+})
