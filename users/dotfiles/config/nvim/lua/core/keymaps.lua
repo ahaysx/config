@@ -7,6 +7,7 @@ local function map(mode, lhs, rhs, opts)
 end
 
 map('n', '<leader>v', ':e $MYVIMRC<CR>')
+map('n', '<leader>sv', ':source $MYVIMRC<CR>')
 
 -- Diagnostics
 map('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
@@ -22,3 +23,15 @@ map('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', { noremap = tru
 
 -- Neotree
 map('n', '<leader>fe', '<cmd>Neotree toggle<CR>', { noremap = true, silent = true })
+
+-- Duplicate line
+map('n', '<leader>y', 'yyp', { noremap = true, silent = true })
+
+-- On a blank line, use cc instead of i so treesitter picks the right indent
+vim.keymap.set('n', 'i', function()
+  if vim.fn.match(vim.fn.getline('.'), '\\S') == -1 then
+    return '"_cc'
+  else
+    return 'i'
+  end
+end, { expr = true })

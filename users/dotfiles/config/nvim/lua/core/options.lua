@@ -20,6 +20,7 @@ vim.opt.expandtab = true
 vim.opt.tabstop = 2
 -- number of spaces indented with '>'
 vim.opt.shiftwidth = 2
+vim.opt.smartindent = true
 vim.opt.shiftround = true
 -- ignore case of normal letters in a pattern unless /C or capital in search
 vim.opt.ignorecase = true
