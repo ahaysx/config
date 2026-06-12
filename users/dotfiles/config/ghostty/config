@@ -1,0 +1,9 @@
+theme = no-clown-fiesta
+
+bold-is-bright = true
+
+font-family = Berkeley Mono
+font-size = 14
+
+title = Terminal
+fullscreen = true

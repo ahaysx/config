@@ -40,6 +40,12 @@
     recursive = true;
   };
 
+  # Ghostty Configuration
+  xdg.configFile.ghostty = {
+    source = ./dotfiles/config/ghostty;
+    recursive = true;
+  };
+
   # Tmux Configuration
   home.file.".tmux.conf".source = ./dotfiles/tmux.conf;
 
