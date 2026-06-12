@@ -45,10 +45,14 @@ vim.keymap.set("n", "<leader>m", function()
   vim.cmd("cwindow")
 end, { desc = "Make and show errors" })
 
--- Run the program in a terminal split
+-- Run the program in a terminal split: uv for python, ./main otherwise
 vim.keymap.set("n", "<leader>r", function()
-  vim.cmd("split | terminal ./main")
-end, { desc = "Run ./main in terminal split" })
+  if vim.bo.filetype == "python" then
+    vim.cmd("split | terminal uv run " .. vim.fn.shellescape(vim.fn.expand("%")))
+  else
+    vim.cmd("split | terminal ./main")
+  end
+end, { desc = "Run current program in terminal split" })
 
 -- Build then run only if compilation succeeds
 -- vim.keymap.set("n", "<leader>b", function()
