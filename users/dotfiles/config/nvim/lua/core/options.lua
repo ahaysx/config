@@ -82,6 +82,8 @@ vim.opt.laststatus = 2
 vim.opt.autowrite = true
 vim.opt.autoread = true
 
+vim.opt.clipboard = "unnamedplus"
+
 vim.cmd [[ set noswapfile ]]
 
 -- Highlight on yank
