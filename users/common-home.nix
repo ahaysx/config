@@ -18,6 +18,7 @@
     nodejs
     unzip
     rustup
+    uv
   ];
 
   home.sessionVariables = {
@@ -28,6 +29,10 @@
     PAGER = "less -FirSwX";
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=#808080";
   };
+
+  home.sessionPath = [
+    "$HOME/.local/bin"
+  ];
 
   # Neovim Configuration
   xdg.configFile.nvim = {
