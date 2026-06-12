@@ -35,8 +35,8 @@ vim.opt.hidden = true
 vim.opt.signcolumn = 'yes'
 -- swap file will be written to disk if nothing is typed in this many ms
 vim.opt.updatetime = 250
--- Decrease mapped sequence wait time
-vim.opt.timeoutlen = 400
+-- Mapped sequence wait time
+vim.opt.timeoutlen = 700
 -- save undo history
 vim.opt.undofile = true
 -- do not backup file when writing to an existing file
